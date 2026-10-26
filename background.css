@@ -1,0 +1,37 @@
+/* Isolated decorative layer: drifting orbs, flowing node network, rising particles.
+   CSS-only; animates transform/opacity/stroke-dashoffset. Non-interactive, behind all content. */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;contain:paint}
+.orb{position:absolute;border-radius:50%;will-change:transform}
+.orb-a{width:62vmax;height:62vmax;left:-18vmax;top:-20vmax;background:radial-gradient(closest-side,rgba(72,165,98,.62),transparent);animation:drift-a 26s ease-in-out infinite alternate}
+.orb-b{width:52vmax;height:52vmax;right:-16vmax;top:18vh;background:radial-gradient(closest-side,rgba(183,227,90,.34),transparent);animation:drift-b 32s ease-in-out infinite alternate}
+.orb-c{width:48vmax;height:48vmax;left:18vw;bottom:-24vmax;background:radial-gradient(closest-side,rgba(38,128,104,.55),transparent);animation:drift-c 38s ease-in-out infinite alternate}
+@keyframes drift-a{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(22vw,12vh,0) scale(1.12)}100%{transform:translate3d(8vw,28vh,0) scale(.95)}}
+@keyframes drift-b{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-24vw,-10vh,0) scale(1.15)}100%{transform:translate3d(-10vw,16vh,0) scale(.92)}}
+@keyframes drift-c{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(20vw,-14vh,0) scale(1.1)}100%{transform:translate3d(-14vw,-6vh,0) scale(1.04)}}
+
+.net{position:absolute;inset:0;width:100%;height:100%;color:var(--accent);opacity:.3;animation:net-shift 40s ease-in-out infinite alternate}
+.net-lines{stroke-dasharray:5 11;animation:flow 7s linear infinite}
+.net-nodes circle{animation:node-pulse 4s ease-in-out infinite alternate}
+.net-nodes circle:nth-child(3n){animation-delay:-1.3s}
+.net-nodes circle:nth-child(3n+1){animation-delay:-2.6s}
+@keyframes net-shift{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(2%,2%,0) scale(1.06)}}
+@keyframes flow{to{stroke-dashoffset:-32}}
+@keyframes node-pulse{from{opacity:.25}to{opacity:1}}
+
+.dot{position:absolute;left:var(--x);bottom:-12px;width:var(--s);height:var(--s);border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);opacity:0;animation:rise var(--d) linear var(--t) infinite;will-change:transform,opacity}
+@keyframes rise{0%{transform:translate3d(0,0,0);opacity:0}10%{opacity:.7}90%{opacity:.7}100%{transform:translate3d(var(--w),-112vh,0);opacity:0}}
+
+/* Light theme: gentler greens on the off-white page */
+html[data-theme="light"] .orb{opacity:.5}
+html[data-theme="light"] .net{opacity:.2}
+html[data-theme="light"] .dot{opacity:0;box-shadow:none}
+
+/* Paused while the tab is hidden (set by background.js) */
+.bg.paused,.bg.paused *{animation-play-state:paused}
+
+/* Reduced motion: calm, static background (orbs and network stay visible, nothing moves) */
+@media (prefers-reduced-motion:reduce){
+  .bg,.bg *{animation:none!important}
+  .net-lines{stroke-dasharray:none}
+  .dot{display:none}
+}
